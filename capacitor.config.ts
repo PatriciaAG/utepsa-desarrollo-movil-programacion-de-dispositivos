@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'practica-camara-gps',
+  appName: 'Practica Camara GPS - III - IV',
   webDir: 'www'
 };
 

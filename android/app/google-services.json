@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451238932823",
+    "project_id": "utepsa-bd634",
+    "storage_bucket": "utepsa-bd634.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451238932823:android:329c0aad7c361ac55ece12",
+        "android_client_info": {
+          "package_name": "Practica_camara_gps.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy0Rn1qvzdd1mFAtbA-pfdM91vpxPzXYc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
