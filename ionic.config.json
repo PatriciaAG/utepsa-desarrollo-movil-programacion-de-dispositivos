@@ -1,0 +1,7 @@
+{
+  "name": "practica_camara_gps",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
