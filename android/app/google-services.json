@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "873167175519",
+    "project_id": "despensa-ea3cc",
+    "storage_bucket": "despensa-ea3cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873167175519:android:a84c34a782c59a8d3d80ea",
+        "android_client_info": {
+          "package_name": "despensasmart.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-11NtTKyhJX-ERo8Ovid932bYv-nNEtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
