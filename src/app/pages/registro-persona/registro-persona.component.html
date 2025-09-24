@@ -1,3 +1,36 @@
-<p>
-  registro-persona works!
-</p>
+<form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input formControlName="nombre"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched">
+        El nombre es obligatorio
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input formControlName="direccion"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched">
+        La dirección es obligatoria
+      </ion-text>
+
+      <ion-item>
+        <ion-label>Foto</ion-label>
+        <ion-button expand="block" (click)="tomarFoto()">Tomar Foto</ion-button>
+      </ion-item>
+      <div *ngIf="foto">
+        <img [src]="foto" alt="Foto tomada" style="max-width: 100%; margin-top: 10px;" />
+      </div>
+
+      <!--<ion-item>
+        <ion-label>Ubicación</ion-label>
+        <ion-button expand="block" (click)="obtenerUbicacion()">Obtener GPS</ion-button>
+      </ion-item>
+      <div *ngIf="ubicacion">
+        <p><strong>Lat:</strong> {{ ubicacion.lat }}</p>
+        <p><strong>Lng:</strong> {{ ubicacion.lng }}</p>
+      </div>-->
+
+      <ion-button type="submit" expand="block" [disabled]="registroForm.invalid">Registrar</ion-button>
+    </form>

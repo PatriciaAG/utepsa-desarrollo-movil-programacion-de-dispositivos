@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "973623375229",
+    "project_id": "appangular-fc739",
+    "storage_bucket": "appangular-fc739.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973623375229:android:754713fdb10b8fbcca0814",
+        "android_client_info": {
+          "package_name": "app.angular"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADOQqp855a_HlVmYZ3rO-2IO1mwKCU80o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
