@@ -22,12 +22,6 @@ allprojects {
     }
 }
 
-// Configure Java toolchain to use Java 21
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

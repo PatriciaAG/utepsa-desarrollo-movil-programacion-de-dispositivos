@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import { Geolocation } from '@capacitor/geolocation';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { PushNotification } from 'src/app/services/push-notification';
@@ -38,19 +37,6 @@ export class RegistroPersonaComponent  implements OnInit {
     this.foto = image.dataUrl!;
     this.registroForm.patchValue({ foto: this.foto });
   }
-/*
-  async obtenerUbicacion() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    this.ubicacion = {
-      lat: coordinates.coords.latitude,
-      lng: coordinates.coords.longitude
-    };
-    this.registroForm.patchValue(
-      { 
-        ubicacion: JSON.stringify(this.ubicacion) 
-      }
-    );
-  }*/
 
   onSubmit() {
     if (this.registroForm.invalid) return;
