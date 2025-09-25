@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1094834200905",
+    "project_id": "proyecto-app-moviles-a378b",
+    "storage_bucket": "proyecto-app-moviles-a378b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094834200905:android:a7038b431ee7df28157a98",
+        "android_client_info": {
+          "package_name": "com.utepsa.practicacamaragps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwmXlLfryzL8tUeulfDWkfjP0T4VBUlWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
