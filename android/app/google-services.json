@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "545717347244",
-    "project_id": "practica-a485b",
-    "storage_bucket": "practica-a485b.firebasestorage.app"
+    "project_number": "736560464987",
+    "project_id": "practica-a593b",
+    "storage_bucket": "practica-a593b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:545717347244:android:294f738108335b79c39009",
+        "mobilesdk_app_id": "1:736560464987:android:dafabbc1cda44461e76b7e",
         "android_client_info": {
           "package_name": "com.utepsa.practicacamaragps"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC2QHP6-rd1572_zwKL5VG1AXwH332BEsI"
+          "current_key": "AIzaSyA9yet6UlRnnY0pkOE7prQSgKrz37Ep27c"
         }
       ],
       "services": {
