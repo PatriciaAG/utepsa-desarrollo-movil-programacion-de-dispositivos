@@ -18,6 +18,6 @@ bootstrapApplication(AppComponent, {
     provideStorage(() => getStorage()),
     provideMessaging(() => getMessaging()),
     provideIonicAngular(),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes, withPreloading(PreloadAllModules)), provideFirebaseApp(() => initializeApp({ projectId: "appencuestabd", appId: "1:765801133121:web:e001835160ebd80f8e82c0", storageBucket: "appencuestabd.firebasestorage.app", apiKey: "AIzaSyBnB85iMGWfozIK-0FGSwjCKRIZNLU_JAc", authDomain: "appencuestabd.firebaseapp.com", messagingSenderId: "765801133121" })), provideFirestore(() => getFirestore()),
   ],
 });
