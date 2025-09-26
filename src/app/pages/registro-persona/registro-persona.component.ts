@@ -14,8 +14,8 @@ import { PushNotification } from 'src/app/services/push-notification';
 })
 export class RegistroPersonaComponent  implements OnInit {
   foto: string | null = null;
-  /*ubicacion: { lat: number, lng: number } | null = null;
-  private push = inject(PushNotification);*/
+  //ubicacion: { lat: number, lng: number } | null = null;
+  private push = inject(PushNotification);
 
   registroForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -42,8 +42,8 @@ export class RegistroPersonaComponent  implements OnInit {
     if (this.registroForm.invalid) return;
 
     if (this.registroForm.valid) {
-      console.log('Datos de la persona:', this.registroForm.value);
-      //this.push.init();
+      //console.log('Datos de la persona:', this.registroForm.value);
+      this.push.init();
     }
   }
 }
