@@ -1,5 +1,5 @@
 {
-  "name": "practica-camara-gps",
+  "name": "practica_camara_gps",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -17,22 +17,36 @@
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
+<<<<<<< HEAD
     "@angular/fire": "^20.0.1",
+=======
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069
     "@angular/forms": "^20.0.0",
     "@angular/platform-browser": "^20.0.0",
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@angular/router": "^20.0.0",
+<<<<<<< HEAD
     "@capacitor-firebase/messaging": "^7.3.1",
+=======
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069
     "@capacitor/android": "7.4.3",
     "@capacitor/app": "7.1.0",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/core": "7.4.3",
+<<<<<<< HEAD
     "@capacitor/haptics": "7.0.2",
     "@capacitor/keyboard": "7.0.3",
     "@capacitor/push-notifications": "^7.0.3",
     "@capacitor/status-bar": "7.0.3",
     "@ionic/angular": "^8.0.0",
     "firebase": "^11.10.0",
+=======
+    "@capacitor/geolocation": "^7.1.5",
+    "@capacitor/haptics": "7.0.2",
+    "@capacitor/keyboard": "7.0.3",
+    "@capacitor/status-bar": "7.0.3",
+    "@ionic/angular": "^8.0.0",
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -67,4 +81,8 @@
     "typescript": "~5.8.0"
   },
   "description": "An Ionic project"
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069

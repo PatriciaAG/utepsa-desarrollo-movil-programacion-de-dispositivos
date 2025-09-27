@@ -1,5 +1,5 @@
 {
-  "name": "practica-camara-gps",
+  "name": "practica_camara_gps",
   "integrations": {
     "capacitor": {}
   },

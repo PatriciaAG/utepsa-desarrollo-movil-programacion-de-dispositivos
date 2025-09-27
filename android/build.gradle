@@ -1,3 +1,5 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     
     repositories {
@@ -22,7 +24,10 @@ allprojects {
     }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

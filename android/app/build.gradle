@@ -4,7 +4,7 @@ android {
     namespace "io.ionic.starter"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.utepsa.practicacamaragps" //"io.ionic.starter"
+        applicationId "io.ionic.starter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -52,4 +52,7 @@ try {
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd2bb1806501e749c62eecc755ace4b996e9f069
