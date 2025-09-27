@@ -14,17 +14,16 @@ import { PushNotification } from 'src/app/services/push-notification';
 })
 export class RegistroPersonaComponent  implements OnInit {
   foto: string | null = null;
-  /*ubicacion: { lat: number, lng: number } | null = null;
-  private push = inject(PushNotification);*/
+  ubicacion: { lat: number, lng: number } | null = null;
+  private push = inject(PushNotification);
 
   registroForm = this.fb.group({
     nombre: ['', Validators.required],
     direccion: ['', Validators.required],
     foto: [''],
-   /*ubicacion: ['']*/
+   //ubicacion: ['']
   });
-
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private toastCtrl: ToastController) {}
   ngOnInit(): void {
     this.registroForm.reset();
   }
@@ -37,13 +36,22 @@ export class RegistroPersonaComponent  implements OnInit {
     this.foto = image.dataUrl!;
     this.registroForm.patchValue({ foto: this.foto });
   }
-
+  async mostrarRegistroExitoso(nombre: string) {
+        const toast = await this.toastCtrl.create({
+        message: `Bienvenido ${nombre}, tu registro fue exitoso 🎉`,
+        duration: 5000,
+        position: 'top',
+        color: 'success'
+      });
+      await toast.present();
+    }
   onSubmit() {
     if (this.registroForm.invalid) return;
 
     if (this.registroForm.valid) {
-      console.log('Datos de la persona:', this.registroForm.value);
-      //this.push.init();
+      //console.log('Datos de la persona:', this.registroForm.value);
+      this.push.init();
     }
+    this.mostrarRegistroExitoso(this.registroForm.value.nombre!);
   }
 }
