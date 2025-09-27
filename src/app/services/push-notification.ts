@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { PushNotifications, Token, PushNotificationSchema, ActionPerformed, Channel } from '@capacitor/push-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 
 @Injectable({
@@ -10,15 +11,21 @@ export class PushNotification {
   private initialized = false;
 
   constructor(private platform: Platform) {}
+  // --------------------------------------------------
+  // init(): Inicializa el sistema de notificaciones push
+  // - Crea canal Android para notificaciones con sonido
+  // - Solicita permisos
+  // - Registra el dispositivo en FCM
+  // - Configura listeners para eventos de push
 
   async init() {
-    if (this.initialized) return;
+    if (this.initialized) return;// evita inicializar varias veces
     await this.platform.ready();
 
-    // Canal (Android 8+) para que se muestren notificaciones con sonido
+   // Canal de notificaciones para Android 8+ con sonido y vibración
     await this.ensureAndroidChannel();
 
-    // Permisos y registro
+   // Pedimos permisos al usuario para recibir notificaciones push
     const permStatus = await PushNotifications.requestPermissions();
     if (permStatus.receive !== 'granted') {
       console.warn('Permiso de notificaciones denegado');
@@ -41,6 +48,8 @@ export class PushNotification {
     PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
       console.log('Notificación en foreground:', notification);
       // Opcional: mostrar un Alert/Toast o disparar una Local Notification
+
+      this.showLocalNotification(notification.title?? 'Notificacion', notification.body?? '');
     });
 
     // Usuario toca la notificación (segundo plano → foreground)
@@ -51,7 +60,7 @@ export class PushNotification {
 
     this.initialized = true;
   }
-   private async ensureAndroidChannel() {
+  private async ensureAndroidChannel() {
     try {
       const channel: Channel = {
         id: 'default',
@@ -69,4 +78,44 @@ export class PushNotification {
       // En iOS no existe createChannel
     }
   }
+
+   // --------------------------------------------------
+  // sendCustomNotification(): Envía una notificación local personalizada
+  // Se puede usar para simular notificaciones o para eventos internos
+  async sendCustomNotification(title: string, body: string) {
+    // 1️⃣ Notificación local
+
+
+  const perm = await LocalNotifications.requestPermissions();
+  if (perm.display !== 'granted') {
+    console.warn('Permiso de notificaciones locales denegado');
+    return;
+  }
+  // Mostramos la notificación local con título y cuerpo personalizados
+    await this.showLocalNotification(title, body);
+
+    // 2️⃣ Enviar a FCM u otros backends si tienes
+    // TODO: aquí puedes integrar API de Firebase para enviar push remotas
+  }
+   // --------------------------------------------------
+  // showLocalNotification(): Programa la notificación local real
+  private async showLocalNotification(title: string, body: string) {
+    try {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title,
+            body,
+            id: Math.floor(Math.random() * 100000), // 👈 número válido para Android
+            schedule: { at: new Date(Date.now() + 500) }, // 0.5s después
+            sound: 'default',
+          },
+        ],
+      });
+    } catch (e) {
+      console.error('Error mostrando notificación local', e);
+    }
+  }
 }
+
+//push-notification.ts

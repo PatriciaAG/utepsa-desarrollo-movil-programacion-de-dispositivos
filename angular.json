@@ -132,7 +132,7 @@
     "schematicCollections": [
       "@ionic/angular-toolkit"
     ],
-    "analytics": "51eefe5e-8c97-4499-9568-5fa18e11151a"
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

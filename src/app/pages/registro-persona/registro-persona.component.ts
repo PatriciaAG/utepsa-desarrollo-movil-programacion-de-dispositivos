@@ -14,9 +14,10 @@ import { PushNotification } from 'src/app/services/push-notification';
 })
 export class RegistroPersonaComponent  implements OnInit {
   foto: string | null = null;
-  //ubicacion: { lat: number, lng: number } | null = null;
+   // Inyectamos nuestro servicio de notificaciones push
   private push = inject(PushNotification);
 
+   // Formulario reactivo para registrar personas
   registroForm = this.fb.group({
     nombre: ['', Validators.required],
     direccion: ['', Validators.required],
@@ -25,8 +26,18 @@ export class RegistroPersonaComponent  implements OnInit {
   });
 
   constructor(private fb: FormBuilder) {}
-  ngOnInit(): void {
+
+
+  // --------------------------------------------------
+  // ngOnInit: Se ejecuta al iniciar el componente
+  async ngOnInit(): Promise<void> {
     this.registroForm.reset();
+  // 🚨 Test rápido: enviamos una notificación local al iniciar la app
+  // Esto verifica que el servicio de notificaciones está funcionando
+  await this.push.sendCustomNotification(
+    'Prueba inicial',
+    'Si ves esto, las LocalNotifications están funcionando ✅'
+  );
   }
 
   async tomarFoto() {
@@ -41,9 +52,20 @@ export class RegistroPersonaComponent  implements OnInit {
   onSubmit() {
     if (this.registroForm.invalid) return;
 
-    if (this.registroForm.valid) {
-      //console.log('Datos de la persona:', this.registroForm.value);
-      this.push.init();
+    const { nombre, direccion } = this.registroForm.value;
+
+    // Inicializa push (solo la primera vez)
+    this.push.init();
+
+    // Disparamos una notificación personalizada indicando que se registró la persona
+    // Esto es local, pero podría integrarse con FCM para notificaciones remotas
+    this.push.sendCustomNotification(
+    'Registro exitoso 🎉',
+    `Se registró a ${nombre} con dirección ${direccion}`
+    );
+   // Limpieza del formulario y foto
+    this.registroForm.reset();
+    this.foto = null;
     }
   }
-}
+
