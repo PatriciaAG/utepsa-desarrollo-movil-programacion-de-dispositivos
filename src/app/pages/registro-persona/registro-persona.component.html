@@ -1,36 +1,127 @@
-<form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-      <ion-item>
-        <ion-label position="floating">Nombre</ion-label>
-        <ion-input formControlName="nombre"></ion-input>
-      </ion-item>
-      <ion-text color="danger" *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched">
-        El nombre es obligatorio
-      </ion-text>
+<ion-content class="ion-padding">
+  <div class="container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-add" class="title-icon"></ion-icon>
+          Registro de Persona
+        </ion-card-title>
+        <ion-card-subtitle>Complete los datos requeridos</ion-card-subtitle>
+      </ion-card-header>
 
-      <ion-item>
-        <ion-label position="floating">Dirección</ion-label>
-        <ion-input formControlName="direccion"></ion-input>
-      </ion-item>
-      <ion-text color="danger" *ngIf="registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched">
-        La dirección es obligatoria
-      </ion-text>
+      <ion-card-content>
+        <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+          <!-- Campo Nombre -->
+          <ion-item class="form-item">
+            <ion-icon name="person" slot="start"></ion-icon>
+            <ion-label position="floating">Nombre completo</ion-label>
+            <ion-input 
+              formControlName="nombre" 
+              placeholder="Ingrese su nombre completo"
+              type="text">
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" class="error-text" *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched">
+            <ion-icon name="warning"></ion-icon>
+            El nombre es obligatorio
+          </ion-text>
 
-      <ion-item>
-        <ion-label>Foto</ion-label>
-        <ion-button expand="block" (click)="tomarFoto()">Tomar Foto</ion-button>
-      </ion-item>
-      <div *ngIf="foto">
-        <img [src]="foto" alt="Foto tomada" style="max-width: 100%; margin-top: 10px;" />
-      </div>
+          <!-- Campo Dirección -->
+          <ion-item class="form-item">
+            <ion-icon name="location" slot="start"></ion-icon>
+            <ion-label position="floating">Dirección</ion-label>
+            <ion-input 
+              formControlName="direccion" 
+              placeholder="Ingrese su dirección"
+              type="text">
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" class="error-text" *ngIf="registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched">
+            <ion-icon name="warning"></ion-icon>
+            La dirección es obligatoria
+          </ion-text>
 
-      <!--<ion-item>
-        <ion-label>Ubicación</ion-label>
-        <ion-button expand="block" (click)="obtenerUbicacion()">Obtener GPS</ion-button>
-      </ion-item>
-      <div *ngIf="ubicacion">
-        <p><strong>Lat:</strong> {{ ubicacion.lat }}</p>
-        <p><strong>Lng:</strong> {{ ubicacion.lng }}</p>
-      </div>-->
+          <!-- Sección de Foto -->
+          <div class="photo-section">
+            <ion-item>
+              <ion-icon name="camera" slot="start"></ion-icon>
+              <ion-label>Foto de perfil</ion-label>
+            </ion-item>
+            <ion-button 
+              expand="block" 
+              fill="outline" 
+              class="photo-button"
+              (click)="tomarFoto()">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              {{ foto ? 'Cambiar Foto' : 'Tomar Foto' }}
+            </ion-button>
+            
+            <div class="photo-preview" *ngIf="foto">
+              <img [src]="foto" alt="Foto tomada" class="preview-image" />
+              <ion-button 
+                fill="clear" 
+                size="small" 
+                class="remove-photo"
+                (click)="removerFoto()">
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
 
-      <ion-button type="submit" expand="block" [disabled]="registroForm.invalid">Registrar</ion-button>
-    </form>
+          <!-- Sección de Notificaciones de Prueba -->
+          <div class="test-notifications-section">
+            <ion-item>
+              <ion-icon name="notifications" slot="start"></ion-icon>
+              <ion-label>Notificaciones de Prueba</ion-label>
+            </ion-item>
+            <p>Pruebe las notificaciones push con estos botones:</p>
+            
+            <div class="notification-buttons">
+              <ion-button 
+                expand="block" 
+                fill="outline"
+                (click)="enviarNotificacionPrueba('bienvenida')">
+                <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+                Notificación de Bienvenida
+              </ion-button>
+              
+              <ion-button 
+                expand="block" 
+                fill="outline"
+                (click)="enviarNotificacionPrueba('registro')">
+                <ion-icon name="person-add" slot="start"></ion-icon>
+                Notificación de Registro
+              </ion-button>
+              
+              <ion-button 
+                expand="block" 
+                fill="outline"
+                (click)="enviarNotificacionPrueba('recordatorio')">
+                <ion-icon name="time" slot="start"></ion-icon>
+                Notificación de Recordatorio
+              </ion-button>
+              
+              <ion-button 
+                expand="block" 
+                fill="outline"
+                (click)="inicializarNotificaciones()">
+                <ion-icon name="settings" slot="start"></ion-icon>
+                Inicializar Notificaciones
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Botón de Envío -->
+          <ion-button 
+            type="submit" 
+            expand="block" 
+            class="submit-button"
+            [disabled]="registroForm.invalid">
+            <ion-icon name="save" slot="start"></ion-icon>
+            Registrar Persona
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
