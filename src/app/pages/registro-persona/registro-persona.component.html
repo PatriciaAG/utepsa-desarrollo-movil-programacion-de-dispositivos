@@ -23,14 +23,5 @@
         <img [src]="foto" alt="Foto tomada" style="max-width: 100%; margin-top: 10px;" />
       </div>
 
-      <!--<ion-item>
-        <ion-label>Ubicación</ion-label>
-        <ion-button expand="block" (click)="obtenerUbicacion()">Obtener GPS</ion-button>
-      </ion-item>
-      <div *ngIf="ubicacion">
-        <p><strong>Lat:</strong> {{ ubicacion.lat }}</p>
-        <p><strong>Lng:</strong> {{ ubicacion.lng }}</p>
-      </div>-->
-
       <ion-button type="submit" expand="block" [disabled]="registroForm.invalid">Registrar</ion-button>
     </form>

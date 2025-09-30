@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { PushNotifications, Token, PushNotificationSchema, ActionPerformed, Channel } from '@capacitor/push-notifications';
 import { FirebaseMessaging } from '@capacitor-firebase/messaging';
+import { LocalNotifications } from '@capacitor/local-notifications';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotification {
   private initialized = false;
-
+  // 2da forma push notification
+  private tokenValue?: string;
   constructor(private platform: Platform) {}
 
   async init() {
@@ -28,6 +31,7 @@ export class PushNotification {
     await PushNotifications.register();
 
     PushNotifications.addListener('registration', (token: Token) => {
+      this.tokenValue = token.value;
       console.log('Token FCM (native):', token.value);
       // TODO: guarda este token en Firestore si quieres targetear este dispositivo
       // await addDoc(collection(getFirestore(), 'tokens'), { token: token.value, plataforma: 'android', creadoEn: serverTimestamp() })
@@ -51,7 +55,8 @@ export class PushNotification {
 
     this.initialized = true;
   }
-   private async ensureAndroidChannel() {
+
+  private async ensureAndroidChannel() {
     try {
       const channel: Channel = {
         id: 'default',
@@ -68,5 +73,23 @@ export class PushNotification {
     } catch (e) {
       // En iOS no existe createChannel
     }
+  }
+  // Primer método .... npm i @capacitor/local-notifications
+  async notifyform(name:any) {
+     await LocalNotifications.requestPermissions();
+     await LocalNotifications.schedule({
+      notifications: [{
+        id: Date.now(), 
+        title: 'Registro exitoso',
+        body: `¡Gracias, ${name}! Tu registro fue guardado.`,
+        smallIcon: 'ic_stat_icon',  
+        channelId: 'default',    
+      }]
+    });
+  }
+
+  async getToken(): Promise<string | undefined> {
+    if (!this.initialized) await this.init();
+    return this.tokenValue;
   }
 }
