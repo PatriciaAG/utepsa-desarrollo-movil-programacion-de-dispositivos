@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { CommonModule } from '@angular/common';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { PushNotification } from 'src/app/services/push-notification';
 
 @Component({
@@ -14,131 +14,57 @@ import { PushNotification } from 'src/app/services/push-notification';
 })
 export class RegistroPersonaComponent  implements OnInit {
   foto: string | null = null;
-  ubicacion: { lat: number, lng: number } | null = null;
+   // Inyectamos nuestro servicio de notificaciones push
   private push = inject(PushNotification);
 
+   // Formulario reactivo para registrar personas
   registroForm = this.fb.group({
     nombre: ['', Validators.required],
     direccion: ['', Validators.required],
     foto: [''],
-    ubicacion: ['']
+   /*ubicacion: ['']*/
   });
 
-  constructor(
-    private fb: FormBuilder,
-    private alertController: AlertController
-  ) {}
-  
-  ngOnInit(): void {
+  constructor(private fb: FormBuilder) {}
+
+
+  // --------------------------------------------------
+  // ngOnInit: Se ejecuta al iniciar el componente
+  async ngOnInit(): Promise<void> {
     this.registroForm.reset();
-    this.inicializarNotificaciones();
+  // 🚨 Test rápido: enviamos una notificación local al iniciar la app
+  // Esto verifica que el servicio de notificaciones está funcionando
+  await this.push.sendCustomNotification(
+    'Prueba inicial',
+    'Si ves esto, las LocalNotifications están funcionando ✅'
+  );
   }
 
   async tomarFoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        resultType: CameraResultType.DataUrl
-      });
-      this.foto = image.dataUrl!;
-      this.registroForm.patchValue({ foto: this.foto });
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '📸 Foto Tomada',
-        body: 'La foto se ha capturado exitosamente'
-      });
-    } catch (error) {
-      console.error('Error al tomar foto:', error);
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '❌ Error en Cámara',
-        body: 'No se pudo tomar la foto. Intente nuevamente.'
-      });
-    }
-  }
-
-  async removerFoto() {
-    this.foto = null;
-    this.registroForm.patchValue({ foto: '' });
-    await this.push.enviarNotificacionPrueba('custom', {
-      title: '🗑️ Foto Eliminada',
-      body: 'La foto ha sido removida del formulario'
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.DataUrl
     });
+    this.foto = image.dataUrl!;
+    this.registroForm.patchValue({ foto: this.foto });
   }
 
-  async onSubmit() {
-    if (this.registroForm.invalid) {
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '⚠️ Formulario Incompleto',
-        body: 'Por favor complete todos los campos requeridos'
-      });
-      return;
-    }
+  onSubmit() {
+    if (this.registroForm.invalid) return;
 
-    try {
-      console.log('Datos de la persona:', this.registroForm.value);
-      
-      // Inicializar notificaciones push
-      await this.push.init();
-      
-      // Mostrar notificación de éxito
-      await this.enviarNotificacionPrueba('registro');
-      
-      // Resetear formulario
-      this.registroForm.reset();
-      this.foto = null;
-      
-    } catch (error) {
-      console.error('Error al registrar persona:', error);
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '❌ Error de Registro',
-        body: 'No se pudo registrar la persona. Intente nuevamente.'
-      });
+    const { nombre, direccion } = this.registroForm.value;
+
+    // Inicializa push (solo la primera vez)
+    this.push.init();
+
+    // Disparamos una notificación personalizada indicando que se registró la persona
+    // Esto es local, pero podría integrarse con FCM para notificaciones remotas
+    this.push.sendCustomNotification(
+    'Registro exitoso 🎉',
+    `Se registró a ${nombre} con dirección ${direccion}`
+    );
+   // Limpieza del formulario y foto
+    this.registroForm.reset();
+    this.foto = null;
     }
   }
-
-  async inicializarNotificaciones() {
-    try {
-      await this.push.init();
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '🔔 Notificaciones Listas',
-        body: 'El sistema de notificaciones se ha inicializado correctamente'
-      });
-    } catch (error) {
-      console.error('Error al inicializar notificaciones:', error);
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '❌ Error de Inicialización',
-        body: 'No se pudieron inicializar las notificaciones'
-      });
-    }
-  }
-
-  async enviarNotificacionPrueba(tipo: string) {
-    try {
-      // Usar el servicio de notificaciones
-      const resultado = await this.push.enviarNotificacionPrueba(
-        tipo as 'bienvenida' | 'registro' | 'recordatorio' | 'custom',
-        tipo === 'registro' ? { 
-          title: 'Registro Exitoso ✅',
-          body: `Persona registrada: ${this.registroForm.get('nombre')?.value || 'Usuario'}`
-        } : undefined
-      );
-
-      console.log('Resultado de notificación:', resultado);
-      
-      // Mostrar alerta de confirmación
-      if (resultado.success) {
-        const alert = await this.alertController.create({
-          header: 'Notificación Enviada',
-          message: resultado.message,
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
-    } catch (error) {
-      console.error('Error al enviar notificación de prueba:', error);
-      await this.push.enviarNotificacionPrueba('custom', {
-        title: '❌ Error de Notificación',
-        body: 'No se pudo enviar la notificación de prueba'
-      });
-    }
-  }
-}
