@@ -36,6 +36,8 @@ export class RegistroPersonaComponent  implements OnInit {
     await this.solicitarPermisosNotificaciones();
   }
 
+
+  // Notificaciones 
   private async solicitarPermisosNotificaciones() {
     try {
       const result = await PushNotifications.requestPermissions();
@@ -59,12 +61,13 @@ export class RegistroPersonaComponent  implements OnInit {
     PushNotifications.addListener('pushNotificationActionPerformed', notification => {
       console.log('Push notification tocada:', notification);
       const data = notification.notification.data;
-      
+
       if (data && data.tipo === 'registro_persona') {
         this.mostrarToast(`Notificación de ${data.nombre} tocada`, 'primary');
       }
     });
 
+    //
     PushNotifications.addListener('registration', token => {
       console.log('Push registration token:', token.value);
     });
