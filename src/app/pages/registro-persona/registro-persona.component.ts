@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { PushNotification } from 'src/app/services/push-notification';
 import { PushNotifications } from '@capacitor/push-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 @Component({
   selector: 'app-registro-persona',
@@ -29,10 +30,39 @@ export class RegistroPersonaComponent  implements OnInit {
 
   constructor(private fb: FormBuilder) {}
   
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.registroForm.reset();
-    // Inicializar push notifications al cargar el componente
     this.push.init();
+    await this.solicitarPermisosNotificaciones();
+  }
+
+  private async solicitarPermisosNotificaciones() {
+    try {
+      const result = await LocalNotifications.requestPermissions();
+      if (result.display === 'granted') {
+        console.log('Permisos de notificaciones locales concedidos');
+        this.configurarListenersNotificaciones();
+      } else {
+        console.log('Permisos de notificaciones locales denegados');
+      }
+    } catch (error) {
+      console.error('Error al solicitar permisos de notificaciones:', error);
+    }
+  }
+
+  private configurarListenersNotificaciones() {
+    LocalNotifications.addListener('localNotificationActionPerformed', notification => {
+      console.log('Push notification tocada:', notification);
+      const data = notification.notification.extra;
+      
+      if (data && data.tipo === 'registro_persona') {
+        this.mostrarToast(`Notificación de ${data.nombre} tocada`, 'primary');
+      }
+    });
+
+    LocalNotifications.addListener('localNotificationReceived', notification => {
+      console.log('Push notification recibida:', notification);
+    });
   }
 
   async tomarFoto() {
@@ -43,13 +73,10 @@ export class RegistroPersonaComponent  implements OnInit {
       });
       this.foto = image.dataUrl!;
       this.registroForm.patchValue({ foto: this.foto });
-      
-      // Mostrar mensaje de confirmación
-      await this.mostrarToast('📸 Foto capturada correctamente', 'success');
-      
+      await this.mostrarToast('Foto capturada correctamente', 'success');
     } catch (error) {
       console.error('Error al tomar foto:', error);
-      await this.mostrarToast('❌ Error al tomar la foto', 'danger');
+      await this.mostrarToast('Error al tomar la foto', 'danger');
     }
   }
 /*
@@ -68,38 +95,30 @@ export class RegistroPersonaComponent  implements OnInit {
 
   async onSubmit() {
     if (this.registroForm.invalid) {
-      await this.mostrarToast('⚠️ Por favor complete todos los campos requeridos', 'warning');
+      await this.mostrarToast('Por favor complete todos los campos requeridos', 'warning');
       return;
     }
 
     if (this.registroForm.valid) {
       try {
-        // Obtener los datos del formulario
         const datosFormulario = this.registroForm.value;
         const nombreUsuario = datosFormulario.nombre || 'Usuario';
         const direccionUsuario = datosFormulario.direccion || 'Sin dirección';
         
         console.log('Datos de la persona:', datosFormulario);
-        
-        // Enviar push notification personalizada
         await this.enviarNotificacionPersonalizada(nombreUsuario, direccionUsuario);
-        
-        // Mostrar toast de éxito
-        await this.mostrarToast(`✅ ${nombreUsuario} registrado exitosamente`, 'success');
-        
-        // Limpiar formulario después del envío
+        await this.mostrarToast(`${nombreUsuario} registrado exitosamente`, 'success');
         this.limpiarFormulario();
         
       } catch (error) {
         console.error('Error al registrar persona:', error);
-        await this.mostrarToast('❌ Error al registrar la persona', 'danger');
+        await this.mostrarToast('Error al registrar la persona', 'danger');
       }
     }
   }
 
   private async enviarNotificacionPersonalizada(nombre: string, direccion: string) {
     try {
-      // Crear mensaje personalizado para la push notification
       const tieneFoto = this.foto ? 'con foto' : 'sin foto';
       const horaActual = new Date().toLocaleTimeString('es-ES', { 
         hour: '2-digit', 
@@ -107,7 +126,7 @@ export class RegistroPersonaComponent  implements OnInit {
       });
       
       const notificationData = {
-        title: '🎉 Nuevo Registro Completado',
+        title: 'Nuevo Registro Completado',
         body: `${nombre} ha sido registrado ${tieneFoto} en ${direccion} a las ${horaActual}`,
         data: {
           tipo: 'registro_persona',
@@ -119,10 +138,8 @@ export class RegistroPersonaComponent  implements OnInit {
         }
       };
 
-      // Simular el envío de la push notification
       await this.enviarNotificacionLocal(notificationData);
-      
-      console.log('🔔 Push notification enviada:', notificationData);
+      console.log('Push notification enviada:', notificationData);
       
     } catch (error) {
       console.error('Error al enviar push notification:', error);
@@ -149,13 +166,12 @@ export class RegistroPersonaComponent  implements OnInit {
   private limpiarFormulario() {
     this.registroForm.reset();
     this.foto = null;
-    console.log('📝 Formulario limpiado');
+    console.log('Formulario limpiado');
   }
 
   private async enviarNotificacionLocal(notificationData: any) {
     try {
-      // Simular el envío de una push notification local
-      const notification = {
+      const notifications = [{
         title: notificationData.title,
         body: notificationData.body,
         id: Date.now(),
@@ -163,18 +179,25 @@ export class RegistroPersonaComponent  implements OnInit {
         sound: 'default',
         attachments: [],
         actionTypeId: '',
-        extra: notificationData.data
-      };
+        extra: notificationData.data,
+        smallIcon: 'ic_stat_icon_config_sample',
+        iconColor: '#488AFF',
+        ongoing: false
+      }];
 
-      console.log('📱 Notificación programada:', notification);
+      console.log('Enviando push notification:', notifications[0]);
       
-      // Mostrar una alerta como simulación de push notification
+      await LocalNotifications.schedule({
+        notifications: notifications
+      });
+
+      console.log('Push notification enviada exitosamente');
+      
+    } catch (error) {
+      console.error('Error al enviar push notification:', error);
       setTimeout(() => {
         alert(`${notificationData.title}\n\n${notificationData.body}`);
       }, 500);
-      
-    } catch (error) {
-      console.error('Error al enviar notificación local:', error);
       throw error;
     }
   }
