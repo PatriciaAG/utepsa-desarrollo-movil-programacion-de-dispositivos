@@ -38,12 +38,13 @@ export class RegistroPersonaComponent  implements OnInit {
 
   private async solicitarPermisosNotificaciones() {
     try {
-      const result = await LocalNotifications.requestPermissions();
-      if (result.display === 'granted') {
-        console.log('Permisos de notificaciones locales concedidos');
+      const result = await PushNotifications.requestPermissions();
+      if (result.receive === 'granted') {
+        console.log('Permisos de push notifications concedidos');
+        await PushNotifications.register();
         this.configurarListenersNotificaciones();
       } else {
-        console.log('Permisos de notificaciones locales denegados');
+        console.log('Permisos de push notifications denegados');
       }
     } catch (error) {
       console.error('Error al solicitar permisos de notificaciones:', error);
@@ -51,17 +52,30 @@ export class RegistroPersonaComponent  implements OnInit {
   }
 
   private configurarListenersNotificaciones() {
-    LocalNotifications.addListener('localNotificationActionPerformed', notification => {
+    PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push notification recibida:', notification);
+    });
+
+    PushNotifications.addListener('pushNotificationActionPerformed', notification => {
       console.log('Push notification tocada:', notification);
-      const data = notification.notification.extra;
+      const data = notification.notification.data;
       
       if (data && data.tipo === 'registro_persona') {
         this.mostrarToast(`Notificación de ${data.nombre} tocada`, 'primary');
       }
     });
 
-    LocalNotifications.addListener('localNotificationReceived', notification => {
-      console.log('Push notification recibida:', notification);
+    PushNotifications.addListener('registration', token => {
+      console.log('Push registration token:', token.value);
+    });
+
+    PushNotifications.addListener('registrationError', error => {
+      console.error('Push registration error:', error);
+    });
+
+    document.addEventListener('pushNotificationReceived', (event: any) => {
+      console.log('Push notification simulada recibida:', event.detail);
+      this.mostrarToast(`Push notification: ${event.detail.title}`, 'success');
     });
   }
 
@@ -171,27 +185,34 @@ export class RegistroPersonaComponent  implements OnInit {
 
   private async enviarNotificacionLocal(notificationData: any) {
     try {
-      const notifications = [{
-        title: notificationData.title,
-        body: notificationData.body,
-        id: Date.now(),
-        schedule: { at: new Date(Date.now() + 1000) },
-        sound: 'default',
-        attachments: [],
-        actionTypeId: '',
-        extra: notificationData.data,
-        smallIcon: 'ic_stat_icon_config_sample',
-        iconColor: '#488AFF',
-        ongoing: false
-      }];
+      console.log('Enviando push notification:', notificationData);
 
-      console.log('Enviando push notification:', notifications[0]);
-      
-      await LocalNotifications.schedule({
-        notifications: notifications
-      });
+      setTimeout(() => {
+        const simulatedNotification = {
+          title: notificationData.title,
+          body: notificationData.body,
+          data: notificationData.data,
+          id: Date.now().toString()
+        };
 
-      console.log('Push notification enviada exitosamente');
+        document.dispatchEvent(new CustomEvent('pushNotificationReceived', {
+          detail: simulatedNotification
+        }));
+
+        LocalNotifications.schedule({
+          notifications: [{
+            title: notificationData.title,
+            body: notificationData.body,
+            id: Date.now(),
+            schedule: { at: new Date(Date.now() + 500) },
+            sound: 'default',
+            extra: notificationData.data
+          }]
+        });
+
+      }, 1000);
+
+      console.log('Push notification programada exitosamente');
       
     } catch (error) {
       console.error('Error al enviar push notification:', error);
