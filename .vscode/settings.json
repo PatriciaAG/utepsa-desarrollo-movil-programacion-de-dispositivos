@@ -1,7 +1,9 @@
 {
   "typescript.preferences.autoImportFileExcludePatterns": [
     "@ionic/angular/common",
-    "@ionic/angular"
+    "@ionic/angular",
   ],
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "emulator.emulatorPath": "C:/Android/sdk/emulator",
+  "emulator.androidColdBoot": true
 }
