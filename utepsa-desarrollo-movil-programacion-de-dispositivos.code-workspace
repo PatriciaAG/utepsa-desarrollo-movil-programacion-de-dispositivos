@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "utepsa-desarrollo-movil-programacion-de-dispositivos",
+			"path": "."
+		}
+	],
+	"settings": {
+		"typescript.preferences.autoImportFileExcludePatterns": [
+			"@ionic/angular/common",
+			"@ionic/angular"
+		],
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}

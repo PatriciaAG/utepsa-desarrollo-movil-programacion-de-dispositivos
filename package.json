@@ -32,8 +32,11 @@
     "@capacitor/push-notifications": "^7.0.3",
     "@capacitor/status-bar": "7.0.3",
     "@ionic/angular": "^8.0.0",
+    "bcrypt": "^6.0.0",
+    "express-validator": "^7.2.1",
     "firebase": "^11.10.0",
     "ionicons": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
