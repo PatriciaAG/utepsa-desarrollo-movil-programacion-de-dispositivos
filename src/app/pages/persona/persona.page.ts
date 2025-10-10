@@ -9,7 +9,7 @@ import { RegistroPersonaComponent } from '../registro-persona/registro-persona.c
   templateUrl: './persona.page.html',
   styleUrls: ['./persona.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RegistroPersonaComponent]
+  imports: [IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, RegistroPersonaComponent]
 })
 export class PersonaPage implements OnInit {
 
